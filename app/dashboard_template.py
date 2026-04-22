@@ -3,7 +3,7 @@ dashboard_template.py - Premium Claymorphism UI for Newsletter Service
 """
 
 def get_dashboard_html(admin_key: str = "") -> str:
-    return f"""<!DOCTYPE html>
+    html = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@ def get_dashboard_html(admin_key: str = "") -> str:
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {{
+        :root {
             --bg-beige: #f5f3ef;
             --clay-bg: #fdfcfb;
             --clay-shadow-out: 8px 8px 16px #d1cfcb, -8px -8px 16px #ffffff;
@@ -24,11 +24,11 @@ def get_dashboard_html(admin_key: str = "") -> str:
             --accent-red: #ff6b6b;
             --text-main: #4a4a4a;
             --text-muted: #8e8e8e;
-        }}
+        }
 
-        * {{ box-sizing: border-box; transition: all 0.3s ease; }}
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
-        body {{
+        body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-beige);
             color: var(--text-main);
@@ -37,32 +37,32 @@ def get_dashboard_html(admin_key: str = "") -> str:
             display: flex;
             justify-content: center;
             min-height: 100vh;
-        }}
+        }
 
-        .container {{
+        .container {
             max-width: 1000px;
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1.5fr;
             gap: 30px;
-        }}
+        }
 
-        @media (max-width: 850px) {{
-            .container {{ grid-template-columns: 1fr; }}
-        }}
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; }
+        }
 
         /* --- Components --- */
 
-        .clay-card {{
+        .clay-card {
             background: var(--clay-bg);
             border-radius: 30px;
             padding: 30px;
             box-shadow: var(--clay-shadow-out);
             border: 1px solid rgba(255,255,255,0.4);
             margin-bottom: 30px;
-        }}
+        }
 
-        .clay-title {{
+        .clay-title {
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 25px;
@@ -70,9 +70,9 @@ def get_dashboard_html(admin_key: str = "") -> str:
             display: flex;
             align-items: center;
             gap: 10px;
-        }}
+        }
 
-        .clay-input {{
+        .clay-input {
             width: 100%;
             border: none;
             background: var(--bg-beige);
@@ -83,9 +83,9 @@ def get_dashboard_html(admin_key: str = "") -> str:
             font-size: 15px;
             margin-bottom: 20px;
             outline: none;
-        }}
+        }
 
-        .clay-btn {{
+        .clay-btn {
             width: 100%;
             border: none;
             background: var(--clay-bg);
@@ -100,64 +100,64 @@ def get_dashboard_html(admin_key: str = "") -> str:
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }}
+        }
 
-        .clay-btn:active {{
+        .clay-btn:active {
             box-shadow: var(--clay-shadow-in);
             transform: scale(0.98);
-        }}
+        }
 
-        .clay-btn.primary {{
+        .clay-btn.primary {
             background: var(--accent-blue);
             color: white;
             box-shadow: 6px 6px 12px rgba(74, 144, 226, 0.3), -6px -6px 12px #ffffff;
-        }}
+        }
 
-        .clay-btn.danger {{
+        .clay-btn.danger {
             color: var(--accent-red);
-        }}
+        }
 
-        .badge {{
+        .badge {
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
             box-shadow: var(--clay-shadow-in);
-        }}
+        }
 
-        .badge.success {{ color: var(--accent-green); }}
-        .badge.error {{ color: var(--accent-red); }}
-        .badge.loading {{ color: var(--text-muted); }}
+        .badge.success { color: var(--accent-green); }
+        .badge.error { color: var(--accent-red); }
+        .badge.loading { color: var(--text-muted); }
 
         /* --- Header --- */
-        .header {{
+        .header {
             grid-column: 1 / -1;
             text-align: center;
             padding: 20px;
-        }}
+        }
 
-        .header h1 {{ margin: 0; font-size: 32px; color: #333; }}
-        .header p {{ margin: 5px 0 0; color: var(--text-muted); }}
+        .header h1 { margin: 0; font-size: 32px; color: #333; }
+        .header p { margin: 5px 0 0; color: var(--text-muted); }
 
         /* --- Health Stats --- */
-        .status-grid {{
+        .status-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-        }}
+        }
 
-        .status-item {{
+        .status-item {
             text-align: center;
             padding: 20px;
             border-radius: 25px;
             box-shadow: var(--clay-shadow-in);
-        }}
+        }
 
-        .status-label {{ font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }}
-        .status-value {{ font-size: 18px; font-weight: 700; }}
+        .status-label { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+        .status-value { font-size: 18px; font-weight: 700; }
 
         /* --- Console --- */
-        #console {{
+        #console {
             background: #2a2a2a;
             color: #50fa7b;
             font-family: 'Courier New', Courier, monospace;
@@ -167,9 +167,9 @@ def get_dashboard_html(admin_key: str = "") -> str:
             overflow-y: auto;
             font-size: 13px;
             box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
-        }}
-        .log-entry {{ margin-bottom: 5px; }}
-        .log-time {{ color: #bd93f9; }}
+        }
+        .log-entry { margin-bottom: 5px; }
+        .log-time { color: #bd93f9; }
 
     </style>
 </head>
@@ -289,7 +289,7 @@ def get_dashboard_html(admin_key: str = "") -> str:
     <script>
         const logPanel = document.getElementById('console');
 
-        function log(msg, type = 'info') {{
+        function log(msg, type = 'info') {
             const time = new Date().toLocaleTimeString();
             const div = document.createElement('div');
             div.className = 'log-entry';
@@ -297,13 +297,13 @@ def get_dashboard_html(admin_key: str = "") -> str:
             if (type === 'error') color = '#ff5555';
             if (type === 'warn') color = '#ffb86c';
             
-            div.innerHTML = `<span class="log-time">[${{time}}]</span> <span style="color: ${{color}}">${{msg}}</span>`;
+            div.innerHTML = `<span class="log-time">[${time}]</span> <span style="color: ${color}">${msg}</span>`;
             logPanel.appendChild(div);
             logPanel.scrollTop = logPanel.scrollHeight;
-        }}
+        }
 
-        async function updateHealth() {{
-            try {{
+        async function updateHealth() {
+            try {
                 const res = await fetch('/health');
                 const data = await res.json();
                 
@@ -317,113 +317,113 @@ def get_dashboard_html(admin_key: str = "") -> str:
                 sched.className = 'status-value badge ' + (data.scheduler.running ? 'success' : 'error');
                 
                 log('Health status updated.');
-            }} catch (e) {{
+            } catch (e) {
                 log('Failed to fetch health status', 'error');
-            }}
-        }}
+            }
+        }
 
-        async function subscribe() {{
-            const body = {{
+        async function subscribe() {
+            const body = {
                 name: document.getElementById('sub-name').value,
                 email: document.getElementById('sub-email').value,
                 interests: document.getElementById('sub-interests').value.split(',').map(s => s.trim()),
                 marks: parseInt(document.getElementById('sub-marks').value) || null,
                 budget: parseInt(document.getElementById('sub-budget').value) || null,
                 location: document.getElementById('sub-location').value
-            }};
+            };
 
             if (!body.email || !body.name) return log('Name and Email are required!', 'error');
 
-            log(`Subscribing ${{body.email}}...`);
-            try {{
-                const res = await fetch('/subscribe', {{
+            log(`Subscribing ${body.email}...`);
+            try {
+                const res = await fetch('/subscribe', {
                     method: 'POST',
-                    headers: {{ 'Content-Type': 'application/json' }},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
-                }});
+                });
                 const data = await res.json();
                 if (res.ok) log('✅ ' + data.message);
                 else log('❌ ' + data.detail, 'error');
-            }} catch (e) {{
+            } catch (e) {
                 log('Network error during subscription', 'error');
-            }}
-        }}
+            }
+        }
 
-        async function sendTest() {{
+        async function sendTest() {
             const email = document.getElementById('test-email').value;
             const key = document.getElementById('api-key').value;
             if (!email) return log('Test email required!', 'error');
 
-            log(`Sending test newsletter to ${{email}}...`);
-            try {{
-                const res = await fetch('/send-test', {{
+            log(`Sending test newsletter to ${email}...`);
+            try {
+                const res = await fetch('/send-test', {
                     method: 'POST',
-                    headers: {{ 
+                    headers: { 
                         'Content-Type': 'application/json',
                         'X-API-KEY': key
-                    }},
-                    body: JSON.stringify({{ email: email }})
-                }});
+                    },
+                    body: JSON.stringify({ email: email })
+                });
                 const data = await res.json();
                 if (res.ok) log('✅ Test newsletter sent!');
                 else log('❌ Error: ' + (data.detail || 'Check API Key'), 'error');
-            }} catch (e) {{
+            } catch (e) {
                 log('Network error during test send', 'error');
-            }}
-        }}
+            }
+        }
 
-        async function triggerNow() {{
+        async function triggerNow() {
             const key = document.getElementById('api-key').value;
             log('Triggering full pipeline manual run...');
-            try {{
-                const res = await fetch('/trigger-now', {{
+            try {
+                const res = await fetch('/trigger-now', {
                     method: 'POST',
-                    headers: {{ 'X-API-KEY': key }}
-                }});
+                    headers: { 'X-API-KEY': key }
+                });
                 const data = await res.json();
                 if (res.ok) log('🎉 Pipeline completed! ' + JSON.stringify(data.summary));
                 else log('❌ Error: ' + (data.detail || 'Authentication failed'), 'error');
-            }} catch (e) {{
+            } catch (e) {
                 log('Network error during pipeline trigger', 'error');
-            }}
-        }}
+            }
+        }
 
-        async function fetchUsers() {{
+        async function fetchUsers() {
             const key = document.getElementById('api-key').value;
             if (!key) return log('Admin API Key is required to view users!', 'error');
 
             log('Fetching user list...');
-            try {{
-                const res = await fetch('/users', {{
-                    headers: {{ 'X-API-KEY': key }}
-                }});
+            try {
+                const res = await fetch('/users', {
+                    headers: { 'X-API-KEY': key }
+                });
                 const data = await res.json();
-                if (res.ok) {{
+                if (res.ok) {
                     const tbody = document.getElementById('user-table-body');
-                    if (data.users.length === 0) {{
+                    if (data.users.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No users found.</td></tr>';
-                    }} else {{
+                    } else {
                         tbody.innerHTML = data.users.map(u => `
                             <tr style="border-bottom: 1px solid #eee;">
-                                <td style="padding: 10px;">${{u.name}}</td>
-                                <td style="padding: 10px;">${{u.email}}</td>
-                                <td style="padding: 10px;">${{u.location || 'N/A'}}</td>
-                                <td style="padding: 10px;">${{u.last_sent ? new Date(u.last_sent).toLocaleDateString() : 'Never'}}</td>
+                                <td style="padding: 10px;">${u.name}</td>
+                                <td style="padding: 10px;">${u.email}</td>
+                                <td style="padding: 10px;">${u.location || 'N/A'}</td>
+                                <td style="padding: 10px;">${u.last_sent ? new Date(u.last_sent).toLocaleDateString() : 'Never'}</td>
                             </tr>
                         `).join('');
-                        log(`✅ Loaded ${{data.users.length}} users.`);
-                    }}
-                } else {{
+                        log(`✅ Loaded ${data.users.length} users.`);
+                    }
+                } else {
                     log('❌ Error: ' + (data.detail || 'Authentication failed'), 'error');
-                }}
-            } catch (e) {{
+                }
+            } catch (e) {
                 log('Network error during user fetch', 'error');
-            }}
-        }}
+            }
+        }
 
-        function clearConsole() {{
+        function clearConsole() {
             logPanel.innerHTML = '<div class="log-entry">Console cleared. Ready.</div>';
-        }}
+        }
 
         // Initial load
         updateHealth();
@@ -431,4 +431,5 @@ def get_dashboard_html(admin_key: str = "") -> str:
 
     </script>
 </body>
-</html>"""
+</html>""".replace("{admin_key}", admin_key)
+    return html
