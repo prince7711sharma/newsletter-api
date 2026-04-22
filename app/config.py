@@ -2,6 +2,7 @@
 config.py - Centralized configuration using pydantic-settings
 """
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,13 @@ class Settings(BaseSettings):
     # PostgreSQL
     DATABASE_URL: str = "postgresql://user:pass@localhost:5432/db_name"
     USE_LOCAL_DB: bool = False
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def fix_postgres_prefix(cls, v: str) -> str:
+        if v and v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
 
     # Groq AI
     GROQ_API_KEY: str
