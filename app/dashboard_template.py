@@ -257,6 +257,32 @@ def get_dashboard_html(admin_key: str = "") -> str:
                     <div class="log-entry">Dashboard initialized...</div>
                 </div>
             </div>
+
+            <div class="clay-card">
+                <div class="clay-title" style="display: flex; justify-content: space-between;">
+                    <span>👥</span> Subscribed Users
+                    <button class="clay-btn" onclick="fetchUsers()" style="width: auto; padding: 5px 15px; font-size: 12px;">🔄 Load Users</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 1px solid #ddd;">
+                                <th style="padding: 10px;">Name</th>
+                                <th style="padding: 10px;">Email</th>
+                                <th style="padding: 10px;">Location</th>
+                                <th style="padding: 10px;">Last Sent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body">
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">
+                                    Enter API key and click "Load Users" to see the list.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -359,6 +385,39 @@ def get_dashboard_html(admin_key: str = "") -> str:
                 else log('❌ Error: ' + (data.detail || 'Authentication failed'), 'error');
             }} catch (e) {{
                 log('Network error during pipeline trigger', 'error');
+            }}
+        }}
+
+        async function fetchUsers() {{
+            const key = document.getElementById('api-key').value;
+            if (!key) return log('Admin API Key is required to view users!', 'error');
+
+            log('Fetching user list...');
+            try {{
+                const res = await fetch('/users', {{
+                    headers: {{ 'X-API-KEY': key }}
+                }});
+                const data = await res.json();
+                if (res.ok) {{
+                    const tbody = document.getElementById('user-table-body');
+                    if (data.users.length === 0) {{
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No users found.</td></tr>';
+                    }} else {{
+                        tbody.innerHTML = data.users.map(u => `
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;">${{u.name}}</td>
+                                <td style="padding: 10px;">${{u.email}}</td>
+                                <td style="padding: 10px;">${{u.location || 'N/A'}}</td>
+                                <td style="padding: 10px;">${{u.last_sent ? new Date(u.last_sent).toLocaleDateString() : 'Never'}}</td>
+                            </tr>
+                        `).join('');
+                        log(`✅ Loaded ${{data.users.length}} users.`);
+                    }}
+                } else {{
+                    log('❌ Error: ' + (data.detail || 'Authentication failed'), 'error');
+                }}
+            } catch (e) {{
+                log('Network error during user fetch', 'error');
             }}
         }}
 

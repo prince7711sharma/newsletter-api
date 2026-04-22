@@ -161,6 +161,29 @@ async def subscribe(request: Request, body: SubscriptionRequest):
     }
 
 
+# ─── GET /users (Admin) ───────────────────────────────────────────────────────
+
+@router.get("/users", tags=["Admin"], dependencies=[Depends(validate_api_key)])
+@limiter.limit("5/minute")
+async def list_users(request: Request):
+    """
+    Returns the list of all subscribed users from the database.
+    Requires ADMIN_API_KEY.
+    """
+    from app.database import get_subscribed_users
+    
+    try:
+        users = get_subscribed_users()
+        return {
+            "status": "success",
+            "count": len(users),
+            "users": users
+        }
+    except Exception as e:
+        logger.error(f"❌ Failed to fetch user list: {e}")
+        raise HTTPException(status_code=500, detail="Could not fetch user list.")
+
+
 # ─── POST /send-test ──────────────────────────────────────────────────────────
 
 @router.post("/send-test", tags=["Debug"], dependencies=[Depends(validate_api_key)])
