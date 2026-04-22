@@ -83,9 +83,13 @@ class Database:
         try:
             cls._engine = create_engine(settings.DATABASE_URL)
             cls._SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=cls._engine)
+            
+            # Auto-create tables on startup (no shell needed)
+            Base.metadata.create_all(cls._engine)
+            
             # Simple connectivity check
             with cls._engine.connect() as conn:
-                logger.info("✅ PostgreSQL connected successfully.")
+                logger.info("✅ PostgreSQL connected and tables synchronized.")
         except Exception as e:
             logger.error(f"❌ PostgreSQL connection failed: {e}")
             raise
