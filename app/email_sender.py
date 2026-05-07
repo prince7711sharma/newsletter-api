@@ -43,10 +43,18 @@ def send_email(
             # Attach HTML body
             msg.attach(MIMEText(html_body, "html"))
 
+
             # Connect and send
-            with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+                server.starttls()  # <--- This is the magic line that fixes the freeze!
                 server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
                 server.send_message(msg)
+
+
+            # Connect and send
+            #with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+             #   server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+             #   server.send_message(msg)
 
             logger.info(
                 f"✅ Email sent to {to_email} | Attempt: {attempt}"
