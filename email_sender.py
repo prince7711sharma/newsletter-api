@@ -1,18 +1,16 @@
 """
-email_sender.py - Email delivery via Resend API with retry logic
+email_sender.py - Email delivery via Gmail SMTP with retry logic
 """
 
 import logging
+import smtplib
 import time
-from typing import Optional
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-import resend
-
-from config import settings
+from app.config import settings
 
 logger = logging.getLogger(__name__)
-
-resend.api_key = settings.RESEND_API_KEY
 
 
 def send_email(
@@ -23,7 +21,7 @@ def send_email(
     retries: int = settings.MAX_EMAIL_RETRIES,
 ) -> bool:
     """
-    Send an HTML email via Resend with exponential back-off retry.
+    Send an HTML email via Gmail SMTP with exponential back-off retry.
     Returns True on success, False after all retries fail.
     """
     attempt = 0
@@ -32,30 +30,32 @@ def send_email(
     while attempt < retries:
         attempt += 1
         try:
-            params: resend.Emails.SendParams = {
-                "from": settings.EMAIL_FROM,
-                "to": [to_email],
-                "subject": subject,
-                "html": html_body,
-                "reply_to": settings.EMAIL_FROM,
-                "headers": {
-                    "X-Entity-Ref-ID": f"newsletter-{to_email}",
-                    "List-Unsubscribe": (
-                        f"<{settings.BASE_URL}/unsubscribe?email={to_email}>"
-                    ),
-                },
-            }
-            response = resend.Emails.send(params)
-            email_id = getattr(response, "id", "N/A")
+            # Create message container
+            msg = MIMEMultipart()
+            msg["From"] = settings.EMAIL_FROM
+            msg["To"] = to_email
+            msg["Subject"] = subject
+            
+            # Custom headers for headers
+            msg["X-Entity-Ref-ID"] = f"newsletter-{to_email}"
+            msg["List-Unsubscribe"] = f"<{settings.BASE_URL}/unsubscribe?email={to_email}>"
+
+            # Attach HTML body
+            msg.attach(MIMEText(html_body, "html"))
+
+            # Connect and send (added timeout to prevent infinite hanging)
+            with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.send_message(msg)
+
             logger.info(
-                f"✅ Email sent to {to_email} | "
-                f"ID: {email_id} | Attempt: {attempt}"
+                f"✅ Email sent to {to_email} | Attempt: {attempt}"
             )
             return True
 
-        except resend.exceptions.ResendError as e:
+        except smtplib.SMTPException as e:
             logger.warning(
-                f"⚠️ Resend error for {to_email} "
+                f"⚠️ SMTP error for {to_email} "
                 f"(attempt {attempt}/{retries}): {e}"
             )
         except Exception as e:
