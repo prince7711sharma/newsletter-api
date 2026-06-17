@@ -33,6 +33,7 @@ def send_email(
         try:
             if settings.RESEND_API_KEY:
                 # ─── Option 1: Resend HTTP API (Works on Render) ───
+                logger.info(f"🚀 Using Resend API for {to_email}...")
                 payload = {
                     "from": settings.EMAIL_FROM,
                     "to": [to_email],
@@ -60,6 +61,7 @@ def send_email(
 
             else:
                 # ─── Option 2: Gmail SMTP (Fails on Render Free Tier, works locally) ───
+                logger.info(f"🐌 No Resend key found. Falling back to Gmail SMTP for {to_email}...")
                 msg = MIMEMultipart()
                 msg["From"] = settings.EMAIL_FROM
                 msg["To"] = to_email
