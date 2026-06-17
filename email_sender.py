@@ -70,7 +70,9 @@ def send_email(
                 msg["List-Unsubscribe"] = f"<{settings.BASE_URL}/unsubscribe?email={to_email}>"
                 msg.attach(MIMEText(html_body, "html"))
 
-                with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                    # Use starttls if running locally on port 587, else this still hangs on Render
+                    server.starttls()
                     server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
                     server.send_message(msg)
 
