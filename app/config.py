@@ -22,7 +22,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str
     GROQ_MODEL: str = "llama-3.1-8b-instant"
 
-    # Email (Gmail SMTP)
+    # Email (Resend or Gmail SMTP)
+    RESEND_API_KEY: str = ""
     SMTP_HOST: str = "smtp.gmail.com"
     SMTP_PORT: int = 465
     SMTP_USER: str

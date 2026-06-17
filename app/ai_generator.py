@@ -98,11 +98,20 @@ def _load_relevant_data(location: str) -> dict:
         # If no local match, return a few top-rated ones
         final_colleges = filtered_colleges if filtered_colleges else all_colleges[:10]
 
+        # Simplify the college data to drastically reduce token usage
+        simplified_colleges = [
+            {
+                "name": c.get("name"),
+                "type": c.get("type"),
+                "description": c.get("description")
+            } for c in final_colleges[:5]
+        ]
+
         # Get relevant scholarship info if location is a state
         scholarships = data.get("scholarship_info", {}).get("state_schemes", {}).get(location, "Check national portal")
         
         return {
-            "colleges": final_colleges[:15], # Limit to 15 to keep prompt size manageable
+            "colleges": simplified_colleges,
             "scholarships": scholarships
         }
     except Exception as e:
