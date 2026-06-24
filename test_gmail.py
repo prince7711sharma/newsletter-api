@@ -29,9 +29,9 @@ def test_gmail_delivery():
     )
     
     if success:
-        print("✔ SMTP test email sent successfully!")
+        print("[SUCCESS] SMTP test email sent successfully!")
     else:
-        print("❌ SMTP test email failed. Check your App Password or internet connection.")
+        print("[FAILED] SMTP test email failed. Check your App Password or internet connection.")
 
 if __name__ == "__main__":
     test_gmail_delivery()
